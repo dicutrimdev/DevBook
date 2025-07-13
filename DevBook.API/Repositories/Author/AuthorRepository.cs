@@ -1,8 +1,7 @@
 ﻿using DevBook.API.Data;
-using DevBook.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevBook.API.Repositories;
+namespace DevBook.API.Repositories.Author;
 
 public class AuthorRepository : IAuthorRepository
 {
@@ -10,7 +9,7 @@ public class AuthorRepository : IAuthorRepository
 
     public AuthorRepository(AppDbContext context) => _context = context;
 
-    public async Task AddAsync(Author author)
+    public async Task AddAsync(Entities.Author author)
     {
         if (author is null)
             throw new ArgumentNullException(nameof(author));
@@ -27,12 +26,12 @@ public class AuthorRepository : IAuthorRepository
         _context.Authors.Remove(author);
     }
 
-    public async Task<IList<Author>> GetAllAsync()
+    public async Task<IList<Entities.Author>> GetAllAsync()
     {
         return await _context.Authors.Include(a => a.Books).ToListAsync();
     }
 
-    public async Task<Author?> GetByIdAsync(Guid id)
+    public async Task<Entities.Author?> GetByIdAsync(Guid id)
     {
         if (id == Guid.Empty)
             throw new ArgumentException("Id must not be empty.", nameof(id));
@@ -40,7 +39,7 @@ public class AuthorRepository : IAuthorRepository
         return await _context.Authors.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public Task Update(Author author)
+    public Task Update(Entities.Author author)
     {
         if (author == null)
             throw new ArgumentNullException(nameof(author));
